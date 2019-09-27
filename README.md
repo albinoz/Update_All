@@ -1,9 +1,6 @@
 
-# Update All
-### Update Apps / mac OS System 10.11 < 10.15b
-
-
-#### Update :
+## Update All
+#### Update Apps / mac OS System 10.11 < 10.15b :
 ```
 - AppleStore Apps
 - Apps Found in brew cask
