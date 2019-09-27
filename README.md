@@ -2,7 +2,7 @@
 ## Update All
 #### 10.11 < 10.15b
 
-#### Update Applications & mac OS System :
+#### Update Applications & mac OS System in fr :
 ```
 - AppleStore
 - Found in brew cask
