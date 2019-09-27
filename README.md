@@ -1,7 +1,6 @@
 
 # Update All
-#### Update Apps / mac OS System
-#####  Mac OsX 10.11 < 10.15b
+### Update Apps / mac OS System 10.11 < 10.15b
 
 
 #### Update :
@@ -20,6 +19,6 @@ chmod 755 ~/Desktop/Update_All/Update_All.command  && \
 ~/Desktop/Update_All/Update_All.command
 ```
 
-##### x-> On Error :
+#### x-> On Error :
 `Please Report with log to`
 https://github.com/albinoz/Update_All/issues
