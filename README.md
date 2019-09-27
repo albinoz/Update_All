@@ -4,8 +4,8 @@
 
 #### Update Applications & mac OS System :
 ```
-- AppleStore Apps
-- Apps Found in brew cask
+- AppleStore
+- Found in brew cask
 - mac OS Updates
 ```
 
