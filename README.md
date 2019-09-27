@@ -10,9 +10,7 @@
 - mac OS Updates
 ```
 
-#### How Use :
-
-##### =-> Download & Execute :
+#### =-> Download & Execute :
 ```
 cd ~/Desktop && git clone https://github.com/albinoz/Update_All.git && \
 chmod 755 ~/Desktop/Update_All/Update_All.command  && \
