@@ -1,7 +1,8 @@
 
 ## Update All
-####  Mac OsX 10.11 < 10.15b
-##### Update Apps, AppStore &amp; Current Installed mac OS System
+#### Update Apps / AppStore / Current Installed mac OS System
+#####  Mac OsX 10.11 < 10.15b
+
 
 #### Include :
 ```
