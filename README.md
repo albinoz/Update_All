@@ -1,14 +1,14 @@
 
-## Update All
-#### Update Apps / AppStore / Current Installed mac OS System
+# Update All
+#### Update Apps / mac OS System
 #####  Mac OsX 10.11 < 10.15b
 
 
-#### Include :
+#### Update :
 ```
-- Update AppleStore Apps
-- Update / Link Brew Cask Founds
-- Update mac OS recommended Updates
+- AppleStore Apps
+- Apps Found in brew cask
+- mac OS Updates
 ```
 
 #### How Use :
