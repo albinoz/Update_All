@@ -30,12 +30,13 @@ fi
 tput bold ; echo ; echo '♻️ ' Check Homebrew Install ; tput sgr0 ; sleep 1
 if ls /usr/local/bin/brew >/dev/null ; then tput sgr0 ; echo "HomeBrew AllReady Installed" ; else tput bold ; echo "Installing HomeBrew" ; tput sgr0 ; /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" ; fi
 
-# Check Homebrew Updates
-tput bold ; echo ; echo '♻️ '  Check Homebrew Update ; tput sgr0 ; sleep 1
-brew doctor ; brew update ; brew upgrade ; brew cleanup ; rm -rf "$(brew --cache)"
+# Install java JDK
+tput bold ; echo ; echo '♻️ ' Install java JDK ; tput sgr0 ; sleep 1
+brew cask install java
 
-( #Logs Begin
-exec &> >(while read -r line; do echo "$(date +"[%Y-%m-%d_%H:%M:%S]") $line"; done;) #Date to Every Line
+# Check Homebrew Minimum && Updates
+tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates" ; tput sgr0 ; sleep 1
+brew doctor ; brew update ; brew upgrade ; brew cleanup ; rm -rf "$(brew --cache)"
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
@@ -83,9 +84,3 @@ if [ "$OSX" -ge 13 ] ; then sudo softwareupdate --install --recommended --verbos
 # Time & Logs
 printf '%dh:%dm:%ds\n' $((SECONDS/3600)) $((SECONDS%3600/60)) $((SECONDS%60))
 sleep 3
-
-echo; echo 'Rotating Logs !'
-cat < "$HOME"/Library/Logs/adam-All-Update.log | gzip -9 > "$HOME"/Library/Logs/adam-All-Update."$(date +"%d_%H:%M:%S")".gz
-find "$HOME"/Library/Logs/adam-All-Update*.gz -ctime +30 -exec rm -vfr {} \;
-
-) 2>&1 | tee "$HOME"/Library/Logs/adam-All-Update.log #Logs End
