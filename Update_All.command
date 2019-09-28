@@ -6,14 +6,17 @@ exec &> >(while read -r line; do echo "$(date +"[%Y-%m-%d_%H:%M:%S]") $line"; do
 OSX=$(sw_vers -productVersion | cut -d'.' -f2)
 LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
 tput bold ; echo "adam | 2019-09-28" ; tput sgr0
-tput bold ; echo "Update Apps, AppStore & Current Installed mac OS System" ; tput sgr0
-tput bold ; echo "OS X | 10.11 < 10.15" ; tput sgr0
+tput bold ; echo "Update Applications & Current mac OS System" ; tput sgr0
+tput bold ; echo "mac OS | 10.11 < 10.15" ; tput sgr0
 
 echo; date
-echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - $LANG
+echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - "$LANG"
 fdesetup status
-if [ "$OSX" -ge 11 ] ; then csrutil status ; fi
+csrutil status
 uptime
+
+# Check System Support
+if [ "$OSX" -ge 11 ] ; then
 
 # Check if Admin
 tput bold ; echo ; echo '♻️ ' Check if Admin ; tput sgr0 ; sleep 1
@@ -35,9 +38,10 @@ brew doctor ; brew update ; brew upgrade ; brew cleanup ; rm -rf "$(brew --cache
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
-if ls /usr/local/bin/mas >/dev/null ; then tput sgr0 ; echo "HomeBrew mas AllReady Installed" > /dev/null ; else tput bold ; echo "Installing mas HomeBrew" ; tput sgr0 ; brew install mas ; fi
-mas list | cut -d' ' -f2-3
+if ls /usr/local/bin/mas >/dev/null ; then tput sgr0 ; echo "mas AllReady Installed" > /dev/null ; else tput bold ; echo "Installing mas " ; tput sgr0 ; brew install mas-cli/tap/mas ; fi
+mas list | cut -d' ' -f2-6
 mas upgrade
+
 
 #-> Brew Cask & Apple Store Compare to /Applications Installed
 # Check Installed / Linked Cask Apps
@@ -72,6 +76,7 @@ brew cask list | tr -d " "  ; brew cask upgrade
 
 # Check mac OS Current System Updates
 tput bold ; echo ; echo '♻️ ' Check mac OS Current System Updates ; tput sgr0 ; sleep 1
+sudo softwareupdate --ignore "Install macOS Sierra" "Install macOS High Sierra" "Install macOS Mojave" "Install macOS Catalina"
 if [ "$OSX" -ge 13 ] ; then sudo softwareupdate --install --recommended --verbose --restart ; else softwareupdate --install --recommended --verbose ; fi
 
 # Time & Logs
@@ -79,7 +84,11 @@ printf '%dh:%dm:%ds\n' $((SECONDS/3600)) $((SECONDS%3600/60)) $((SECONDS%60))
 sleep 3
 
 echo; echo 'Rotating Logs !'
-cat < "$HOME"/Library/Logs/adam-Update.log | gzip -9 > "$HOME"/Library/Logs/adam-Update."$(date +"%d_%H:%M:%S")".gz
-find "$HOME"/Library/Logs/adam-Update*.gz -ctime +30 -exec rm -vfr {} \;
+cat < "$HOME"/Library/Logs/adam-All-Update.log | gzip -9 > "$HOME"/Library/Logs/adam-All-Update."$(date +"%d_%H:%M:%S")".gz
+find "$HOME"/Library/Logs/adam-All-Update*.gz -ctime +30 -exec rm -vfr {} \;
 
-) 2>&1 | tee "$HOME"/Library/Logs/adam-Update.log #Logs End
+else
+tput bold ; echo ; echo '❌ ''System' "$OSX" 'Not Supported' && exit ; tput sgr0 ; sleep 1
+fi
+
+) 2>&1 | tee "$HOME"/Library/Logs/adam-All-Update.log #Logs End
