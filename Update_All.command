@@ -1,22 +1,20 @@
 #!/bin/bash
 clear
 
-( #Logs Begin
-exec &> >(while read -r line; do echo "$(date +"[%Y-%m-%d_%H:%M:%S]") $line"; done;) #Date to Every Line
 OSX=$(sw_vers -productVersion | cut -d'.' -f2)
 LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
 tput bold ; echo "adam | 2019-09-28" ; tput sgr0
 tput bold ; echo "Update Applications & Current mac OS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.11 < 10.15" ; tput sgr0
 
+# Check Minimum System
+if [ "$OSX" -ge 11 ] ; then echo System Ok > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
+
 echo; date
 echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - "$LANG"
 fdesetup status
 csrutil status
 uptime
-
-# Check System Support
-if [ "$OSX" -ge 11 ] ; then
 
 # Check if Admin
 tput bold ; echo ; echo '♻️ ' Check if Admin ; tput sgr0 ; sleep 1
@@ -35,6 +33,9 @@ if ls /usr/local/bin/brew >/dev/null ; then tput sgr0 ; echo "HomeBrew AllReady 
 # Check Homebrew Updates
 tput bold ; echo ; echo '♻️ '  Check Homebrew Update ; tput sgr0 ; sleep 1
 brew doctor ; brew update ; brew upgrade ; brew cleanup ; rm -rf "$(brew --cache)"
+
+( #Logs Begin
+exec &> >(while read -r line; do echo "$(date +"[%Y-%m-%d_%H:%M:%S]") $line"; done;) #Date to Every Line
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
@@ -86,9 +87,5 @@ sleep 3
 echo; echo 'Rotating Logs !'
 cat < "$HOME"/Library/Logs/adam-All-Update.log | gzip -9 > "$HOME"/Library/Logs/adam-All-Update."$(date +"%d_%H:%M:%S")".gz
 find "$HOME"/Library/Logs/adam-All-Update*.gz -ctime +30 -exec rm -vfr {} \;
-
-else
-tput bold ; echo ; echo '❌ ''System' "$OSX" 'Not Supported' && exit ; tput sgr0 ; sleep 1
-fi
 
 ) 2>&1 | tee "$HOME"/Library/Logs/adam-All-Update.log #Logs End
