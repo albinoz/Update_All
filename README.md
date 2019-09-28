@@ -1,12 +1,12 @@
 
 ## Update All
-#### 10.11 < 10.15b
+#### 10.11 < 10.15
 
-#### Update Applications & mac OS System :
+#### Update Applications & Current mac OS System :
 ```
-- AppleStore
-- Found in brew cask
-- mac OS Updates
+- Update Applications Found in AppleStore
+- Update Applications Found in brew cask
+- Update Current mac OS System
 ```
 
 #### =-> Download & Execute :
