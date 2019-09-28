@@ -4,12 +4,13 @@ clear
 ( #Logs Begin
 exec &> >(while read -r line; do echo "$(date +"[%Y-%m-%d_%H:%M:%S]") $line"; done;) #Date to Every Line
 OSX=$(sw_vers -productVersion | cut -d'.' -f2)
-tput bold ; echo "adam | 2019-09-27" ; tput sgr0
+LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
+tput bold ; echo "adam | 2019-09-28" ; tput sgr0
 tput bold ; echo "Update Apps, AppStore & Current Installed mac OS System" ; tput sgr0
 tput bold ; echo "OS X | 10.11 < 10.15" ; tput sgr0
 
 echo; date
-echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)"
+echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - $LANG
 fdesetup status
 if [ "$OSX" -ge 11 ] ; then csrutil status ; fi
 uptime
@@ -61,8 +62,8 @@ awk 'NR==FNR{a[$0];next} !($0 in a)' /tmp/mas.txt /tmp/Installed.txt > /tmp/noma
 brew cask list | tr -d " " > /tmp/cask-installed.txt
 awk 'NR==FNR{a[$0];next} !($0 in a)' /tmp/cask-installed.txt /tmp/nomas-Installed.txt > /tmp/Final-List.txt
 
-# Force Reinstall Cask Apps without Link Found
-awk '{print "brew cask reinstall --force --language=fr "$0}' /private/tmp/Final-List.txt > /tmp/InstallNow.command
+# Force Reinstall Cask Apps without Link Found By LANG Used
+sed "s/^/brew cask reinstall --force --language=$LANG /" /private/tmp/Final-List.txt > /tmp/InstallNow.command
 chmod 755 /private/tmp/InstallNow.command && /private/tmp/InstallNow.command
 
 # Check Cask Apps Update
