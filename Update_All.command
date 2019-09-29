@@ -3,7 +3,7 @@ clear
 
 OSX=$(sw_vers -productVersion | cut -d'.' -f2)
 LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
-tput bold ; echo "adam | 2019-09-28" ; tput sgr0
+tput bold ; echo "adam | 2019-09-29" ; tput sgr0
 tput bold ; echo "Update Applications & Current mac OS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.11 < 10.15" ; tput sgr0
 
@@ -16,23 +16,21 @@ fdesetup status
 csrutil status
 uptime
 
-# Check if Admin
-tput bold ; echo ; echo '♻️ ' Check if Admin ; tput sgr0 ; sleep 1
+# Check if Admin & Password or exit
+tput bold ; echo ; echo '♻️ ' Check Admin Password ; tput sgr0
 if groups "$(whoami)" | grep -q -w admin; then
   echo "$(whoami)" "is admin";
-sudo echo "You should Pass"
+if echo Require Administrator Privileges ; sudo echo You Shall Pass | grep Shall ; then echo; else exit ; fi
 else
-    echo "$(whoami)" "is not admin, exit…";
-exit
+    echo "$(whoami)" "is not admin, exit…" ; exit
 fi
 
 # Check Homebrew Install
 tput bold ; echo ; echo '♻️ ' Check Homebrew Install ; tput sgr0 ; sleep 1
 if ls /usr/local/bin/brew >/dev/null ; then tput sgr0 ; echo "HomeBrew AllReady Installed" ; else tput bold ; echo "Installing HomeBrew" ; tput sgr0 ; /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" ; fi
 
-# Install java JDK
-tput bold ; echo ; echo '♻️ ' Install java JDK ; tput sgr0 ; sleep 1
-brew cask install java
+# Check Open java JDK
+if brew cask list | grep java > /dev/null ; then echo nothing > /dev/null ; else echo '♻️ ' Install Open java JDK && brew cask install java ; fi
 
 # Check Homebrew Minimum && Updates
 tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates" ; tput sgr0 ; sleep 1
@@ -81,6 +79,7 @@ tput bold ; echo ; echo '♻️ ' Check mac OS Current System Updates ; tput sgr
 sudo softwareupdate --ignore "Install macOS Sierra" "Install macOS High Sierra" "Install macOS Mojave" "Install macOS Catalina"
 if [ "$OSX" -ge 13 ] ; then sudo softwareupdate --install --recommended --verbose --restart ; else softwareupdate --install --recommended --verbose ; fi
 
-# Time & Logs
+# Time
+echo ; echo '✅ ' All Update Completed ; tput sgr0
 printf '%dh:%dm:%ds\n' $((SECONDS/3600)) $((SECONDS%3600/60)) $((SECONDS%60))
-sleep 3
+say -v Hysterical All Update Completed
