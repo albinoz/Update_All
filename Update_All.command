@@ -30,7 +30,7 @@ tput bold ; echo ; echo '♻️ ' Check Homebrew Install ; tput sgr0 ; sleep 1
 if ls /usr/local/bin/brew >/dev/null ; then tput sgr0 ; echo "HomeBrew AllReady Installed" ; else tput bold ; echo "Installing HomeBrew" ; tput sgr0 ; /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" ; fi
 
 # Check Open java JDK
-if brew cask list | grep java > /dev/null ; then echo nothing > /dev/null ; else echo '♻️ ' Install Open java JDK && brew cask install java ; fi
+if brew cask list | grep java > /dev/null ; then echo nothing > /dev/null ; else echo ; echo '♻️ ' Install Open java JDK && sudo rm -vfr /Library/Java/JavaVirtualMachines/openjdk* && brew cask reinstall -force java ; fi
 
 # Check Homebrew Minimum && Updates
 tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates" ; tput sgr0 ; sleep 1
