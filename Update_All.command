@@ -34,7 +34,8 @@ if brew cask list | grep java > /dev/null ; then echo nothing > /dev/null ; else
 
 # Check Homebrew Minimum && Updates
 tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates" ; tput sgr0 ; sleep 1
-brew doctor ; brew update ; brew upgrade ; brew cleanup ; rm -rf "$(brew --cache)"
+brew doctor ; brew update ; brew upgrade ; brew cleanup ; brew tap buo/cask-upgrade ; rm -rf "$(brew --cache)"
+
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
@@ -72,9 +73,7 @@ chmod 755 /private/tmp/InstallNow.command && /private/tmp/InstallNow.command
 
 # Check Cask Apps Update
 tput bold ; echo ; echo '♻️ '  Check Cask Apps Update ; tput sgr0 ; sleep 3
-brew cask list | tr -d " "  ; brew cask upgrade
-sed 's/^/brew cask upgrade /' /tmp/nomas-Installed.txt > /tmp/cask-upgrade.txt
-chmod 755 /tmp/cask-upgrade.txt && /tmp/cask-upgrade.txt
+brew cu -a -y
 
 # Check mac OS Current System Updates
 tput bold ; echo ; echo '♻️ ' Check mac OS Current System Updates ; tput sgr0 ; sleep 1
