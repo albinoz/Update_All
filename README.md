@@ -6,7 +6,7 @@
 ```
 - Update Applications Found in AppleStore
 - Update Applications Found in brew cask
-- Update Current mac OS System
+- Update Current macOS System
 ```
 
 #### =-> Download & Execute :
