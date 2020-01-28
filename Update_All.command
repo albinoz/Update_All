@@ -3,8 +3,8 @@ clear
 
 OSX=$(sw_vers -productVersion | cut -d'.' -f2)
 LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
-tput bold ; echo "adam | 2020-01-16" ; tput sgr0
-tput bold ; echo "Update Applications & Current mac OS System" ; tput sgr0
+tput bold ; echo "adam | 2020-01-28" ; tput sgr0
+tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.11 < 10.15" ; tput sgr0
 
 # Check Minimum System
@@ -76,13 +76,14 @@ brew cu -a -y --cleanup
 # Unactivate Auto UnWanted OS Updates
 tput bold ; echo ; echo '⚓️ ' Unactivate Unwanted Auto mac OS Updates ; tput sgr0 ; sleep 1
 sudo softwareupdate --ignore "macOS Sierra" "macOS High Sierra" "macOS Mojave" "macOS Catalina" "macOSInstallerNotification_GM"
-if [ -e /Library/Bundles/OSXNotification.bundle ]; then sudo zip -r /Library/Bundles/OSXNotification.zip /Library/Bundles/OSXNotification.bundle && rm -vfr /Library/Bundles/OSXNotification.bundle ; fi
+if [ -e /Library/Bundles/OSXNotification.bundle ]; then sudo zip -r /Library/Bundles/OSXNotification.zip /Library/Bundles/OSXNotification.bundle && sudo rm -vfr /Library/Bundles/OSXNotification.bundle ; fi
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates -bool False
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool true
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool true
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool true
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool true
 sudo defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool False
+defaults write com.apple.preferences.softwareupdate "ProductKeysLastSeenByUser = ( "061-32986" );"  # Catalina Tablet System Preference
 
 # Check mac OS Current System Updates
 tput bold ; echo ; echo '♻️ ' Check mac OS Current System Updates ; tput sgr0 ; sleep 1
