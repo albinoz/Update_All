@@ -1,18 +1,20 @@
 #!/bin/bash
 clear
 
-OSX=$(sw_vers -productVersion | cut -d'.' -f2)
+OSX=$(sw_vers -productVersion)
+OSXMajor=$(sw_vers -productVersion | cut -d'.' -f1)
+if [[ "$OSXMajor" -ge 11 ]]; then OSXV=$(echo "$OSXMajor"+5 | bc) ; else OSXV=$(sw_vers -productVersion | cut -d'.' -f2) ; fi
 LANG=$(defaults read -g AppleLocale | cut -d'_' -f1)
 User=$(whoami)
 UUID=$(dscl . -read /Users/"$User" | grep GeneratedUID | cut -d' ' -f2)
 dPass=$(echo "$User"'*'"$UUID")
 dSalt=$(echo "$dPass" | sed "s@[^0-9]@@g")
-tput bold ; echo "adam | 2020-10-30" ; tput sgr0
+tput bold ; echo "adam | 2020-12-26" ; tput sgr0
 tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
-tput bold ; echo "mac OS | 10.11 < 10.15" ; tput sgr0
+tput bold ; echo "mac OS | 10.11 < 11" ; tput sgr0
 
 # Check Minimum System
-if [ "$OSX" -ge 11 ] ; then echo System Ok > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
+#if [ "$OSX" -ge 11 ] ; then echo System Ok > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
 
 echo; date
 echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - "$LANG"
@@ -49,7 +51,7 @@ fi
 
 # Check Homebrew Install
 tput bold ; echo ; echo '♻️ ' Check Homebrew Install ; tput sgr0 ; sleep 1
-if ls /usr/local/bin/ | grep brew > /dev/null ; then tput sgr0 ; echo "HomeBrew AllReady Installed" ; else tput bold ; echo "Installing HomeBrew" ; tput sgr0 ; /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" ; fi
+if ls /usr/local/bin/ | grep brew > /dev/null ; then tput sgr0 ; echo "HomeBrew AllReady Installed" ; else tput bold ; echo "Installing HomeBrew" ; tput sgr0 ; /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" ; fi
 
 # Check HomeBrew Cask Install
 tput bold ; echo ; echo '♻️ ' Check Homebrew Cask Install ; tput sgr0 ; sleep 1
@@ -99,7 +101,7 @@ awk 'NR==FNR{a[$0];next} !($0 in a)' /tmp/com.adam.Full_Update/cask-installed.tx
 fi
 
 # Force Reinstall Cask Apps without Link Found By LANG Used
-sed "s/^/brew cask reinstall --force --language=$LANG /" /private/tmp/com.adam.Full_Update/Final-List.txt > /tmp/com.adam.Full_Update/InstallNow.command
+sed "s/^/brew reinstall --cask --force --language=$LANG /" /private/tmp/com.adam.Full_Update/Final-List.txt > /tmp/com.adam.Full_Update/InstallNow.command
 chmod 755 /private/tmp/com.adam.Full_Update/InstallNow.command && /private/tmp/com.adam.Full_Update/InstallNow.command
 
 # Cask Apps Updates ( no lastest )
@@ -108,24 +110,24 @@ brew cu -a -y --cleanup
 
 # Unactivate Auto UnWanted OS Updates
 tput bold ; echo ; echo '⚓️ 'Unactivate Unwanted Auto mac OS Updates ; tput sgr0 ; sleep 1
-echo $AdminPass | sudo -S -k softwareupdate --ignore "macOS Sierra" "macOS High Sierra" "macOS Mojave" "macOS Catalina" "macOSInstallerNotification_GM"
+#echo $AdminPass | sudo -S -k softwareupdate --ignore "macOS Sierra" "macOS High Sierra" "macOS Mojave" "macOS Catalina" "macOSInstallerNotification_GM"
 if [ -e /Library/Bundles/OSXNotification.bundle ]; then echo $AdminPass | sudo -S -k zip -r /Library/Bundles/OSXNotification.zip /Library/Bundles/OSXNotification.bundle && echo $AdminPass | sudo -S -k rm -vfr /Library/Bundles/OSXNotification.bundle ; fi
 
 if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates | grep 1 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates -bool False ; fi
 if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled | grep 0  ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool true ; fi
 if defaults read /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload | grep 1 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -bool False ; fi
 if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall | grep 0 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool true ; fi
-if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall | grep 0 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool true ; fi
+#if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall | grep 0 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool true ; fi
 if defaults read /Library/Preferences/com.apple.commerce.plist AutoUpdate | grep 1 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool False ; fi
 
-if [ "$OSX" -ge 15 ] ;then
-if defaults read com.apple.preferences.softwareupdate | grep "061-32986" ; then echo ; else defaults write com.apple.preferences.softwareupdate "ProductKeysLastSeenByUser = ( "061-32986" );" ; fi  # Catalina Tablet System Preference
-fi
+#if [ "$OSX" -ge 15 ] ;then
+#if defaults read com.apple.preferences.softwareupdate | grep "061-32986" ; then echo ; else defaults write com.apple.preferences.softwareupdate "ProductKeysLastSeenByUser = ( "061-32986" );" ; fi  # Catalina Tablet System Preference
+#fi
 
 # Check mac OS Current System Updates
 tput bold ; echo ; echo '♻️ ' Check mac OS Current System Updates ; tput sgr0 ; sleep 1
-if [ "$OSX" -ge 13 ] ; then echo $AdminPass | sudo -S -k softwareupdate --install --recommended --verbose --restart ; else softwareupdate --install --recommended --verbose ; fi
-if [ "$OSX" -ge 13 ] ; then defaults write com.apple.systempreferences AttentionPrefBundleIDs 0 ; fi
+if [ "$OSXV" -ge 13 ] ; then echo $AdminPass | sudo -S -k softwareupdate --install --recommended --verbose --restart ; else softwareupdate --install --recommended --verbose ; fi
+if [ "$OSXV" -ge 13 ] ; then defaults write com.apple.systempreferences AttentionPrefBundleIDs 0 ; fi
 
 # Purge /tmp/com.adam.Full_Update/
 rm -fr /tmp/com.adam.Full_Update/
