@@ -9,7 +9,7 @@ User=$(whoami)
 UUID=$(dscl . -read /Users/"$User" | grep GeneratedUID | cut -d' ' -f2)
 dPass=$(echo "$User"'*'"$UUID")
 dSalt=$(echo "$dPass" | sed "s@[^0-9]@@g")
-tput bold ; echo "adam | 2020-12-26" ; tput sgr0
+tput bold ; echo "adam | 2020-04-13" ; tput sgr0
 tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.11 < 11" ; tput sgr0
 
@@ -63,6 +63,7 @@ brew doctor ; brew cleanup ; brew update ; brew upgrade ; brew tap buo/cask-upgr
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
+rm -r ~/Library/Caches/com.mphys.mas-cli/
 if ls /usr/local/bin/ | grep mas > /dev/null ; then tput sgr0 ; echo "mas AllReady Installed" > /dev/null ; else tput bold ; echo "Installing mas " ; tput sgr0 ; brew install mas ; fi
 mas list | cut -d' ' -f2-6
 mas upgrade
@@ -81,7 +82,7 @@ find /Applications -maxdepth 1 -iname "*.app" | cut -d'/' -f3 | sed 's/.app//g' 
 mas list | cut -d'(' -f1 | sed s'/.$//' | cut -d' ' -f2-3 | sed 's/ /-/g'| tr 'A-Z ' 'a-z ' > /tmp/com.adam.Full_Update/mas.txt
 
 # List Cask Apps Availaibles
-brew search --casks | tr -d " " > /tmp/com.adam.Full_Update/cask.txt
+brew search --casks --desc '' | cut -d':' -f1 | tr -d " " > /tmp/com.adam.Full_Update/cask.txt
 
 # Merge Only Installed /Applications from Cask List
 awk 'NR==FNR{arr[$0];next} $0 in arr' /tmp/com.adam.Full_Update/App.txt /tmp/com.adam.Full_Update/cask.txt > /tmp/com.adam.Full_Update/Installed.txt
