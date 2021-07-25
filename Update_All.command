@@ -9,12 +9,12 @@ User=$(whoami)
 UUID=$(dscl . -read /Users/"$User" | grep GeneratedUID | cut -d' ' -f2)
 dPass=$(echo "$User"'*'"$UUID")
 dSalt=$(echo "$dPass" | sed "s@[^0-9]@@g")
-tput bold ; echo "adam | 2020-04-13" ; tput sgr0
+tput bold ; echo "adam | 2021-07-25" ; tput sgr0
 tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.11 < 11" ; tput sgr0
 
 # Check Minimum System
-#if [ "$OSX" -ge 11 ] ; then echo System Ok > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
+if [ "$OSXV" -ge 11 ] ; then echo System "$OSX" Supported > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
 
 echo; date
 echo "$(hostname)" - "$(whoami)" - "$(sw_vers -productVersion)" - "$LANG"
@@ -63,9 +63,9 @@ brew doctor ; brew cleanup ; brew update ; brew upgrade ; brew tap buo/cask-upgr
 
 # Check AppleStore Updates
 tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
-rm -r ~/Library/Caches/com.mphys.mas-cli/
+#rm -r ~/Library/Caches/com.mphys.mas-cli/
 if ls /usr/local/bin/ | grep mas > /dev/null ; then tput sgr0 ; echo "mas AllReady Installed" > /dev/null ; else tput bold ; echo "Installing mas " ; tput sgr0 ; brew install mas ; fi
-mas list | cut -d' ' -f2-6
+mas list | awk '{print $2 " " $3 " " $4 " " $5 " " $6}'
 mas upgrade
 
 #-> Brew Cask & Apple Store Compare to /Applications Installed
@@ -111,7 +111,7 @@ brew cu -a -y --cleanup
 
 # Unactivate Auto UnWanted OS Updates
 tput bold ; echo ; echo '⚓️ 'Unactivate Unwanted Auto mac OS Updates ; tput sgr0 ; sleep 1
-#echo $AdminPass | sudo -S -k softwareupdate --ignore "macOS Sierra" "macOS High Sierra" "macOS Mojave" "macOS Catalina" "macOSInstallerNotification_GM"
+#echo $AdminPass | sudo -S -k softwareupdate --ignore "macOS Sierra" "macOS High Sierra" "macOS Mojave" "macOS Catalina" "macOS Big Sur" "macOSInstallerNotification_GM"
 if [ -e /Library/Bundles/OSXNotification.bundle ]; then echo $AdminPass | sudo -S -k zip -r /Library/Bundles/OSXNotification.zip /Library/Bundles/OSXNotification.bundle && echo $AdminPass | sudo -S -k rm -vfr /Library/Bundles/OSXNotification.bundle ; fi
 
 if defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates | grep 1 ; then echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates -bool False ; fi
