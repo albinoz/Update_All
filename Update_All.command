@@ -9,9 +9,9 @@ User=$(whoami)
 UUID=$(dscl . -read /Users/"$User" | grep GeneratedUID | cut -d' ' -f2)
 dPass=$(echo "$User"'*'"$UUID")
 dSalt=$(echo "$dPass" | sed "s@[^0-9]@@g")
-tput bold ; echo "adam | 2021-07-25" ; tput sgr0
+tput bold ; echo "adam | 2021-10-07" ; tput sgr0
 tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
-tput bold ; echo "mac OS | 10.11 < 11" ; tput sgr0
+tput bold ; echo "mac OS | 10.11 < 12" ; tput sgr0
 
 # Check Minimum System
 if [ "$OSXV" -ge 11 ] ; then echo System "$OSX" Supported > /dev/null ; else echo System "$OSX" not Supported && exit ; fi
@@ -55,7 +55,7 @@ if ls /usr/local/bin/ | grep brew > /dev/null ; then tput sgr0 ; echo "HomeBrew 
 
 # Check HomeBrew Cask Install
 tput bold ; echo ; echo '♻️ ' Check Homebrew Cask Install ; tput sgr0 ; sleep 1
-if ls /usr/local/Homebrew/Library/Taps/buo/homebrew-cask-upgrade/bin/ | grep brew-cask-upgrade > /dev/null ; then tput sgr0 ; echo "HomeBrew Cask AllReady Installed" ; else tput bold ; echo "Installing HomeBrew Cask" ; tput sgr0 ; brew cask ; fi
+if ls /usr/local/Homebrew/Library/Taps/buo/homebrew-cask-upgrade/bin/ | grep brew-cask-upgrade > /dev/null ; then tput sgr0 ; echo "HomeBrew Cask AllReady Installed" ; else tput bold ; echo "Installing HomeBrew Cask" ; tput sgr0 ; brew install cask ; fi
 
 # Check Homebrew Minimum && Updates
 tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates & Minimum" ; tput sgr0 ; sleep 1
