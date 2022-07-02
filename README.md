@@ -1,6 +1,6 @@
 
 ## Update All
-#### macOS 10.11 < 11
+#### macOS 10.11 < 12
 
 #### Update Applications & mac OS System :
 ```
