@@ -12,7 +12,7 @@ User=$(whoami)
 UUID=$(dscl . -read /Users/"$User" | grep GeneratedUID | cut -d' ' -f2)
 dPass=$(echo "$User"'*'"$UUID")
 dSalt=$(echo "$dPass" | sed "s@[^0-9]@@g")
-tput bold ; echo "adam | 2024-12-17" ; tput sgr0
+tput bold ; echo "adam | 2025-11-03" ; tput sgr0
 tput bold ; echo "Update Applications & Current macOS System" ; tput sgr0
 tput bold ; echo "mac OS | 10.14 < 15" ; tput sgr0
 
@@ -61,13 +61,14 @@ if ls /*/*/bin/ | grep brew > /dev/null ; then tput sgr0 ; echo "HomeBrew AllRea
 
 # Check Homebrew Minimum && Updates
 tput bold ; echo ; echo '♻️ '  "Check Homebrew Updates & Minimum" ; tput sgr0 ; sleep 1
-brew doctor ; brew cleanup ; brew update ; brew upgrade ; brew tap buo/cask-upgrade ; brew autoremove ; rm -rf "$(brew --cache)"
+brew update ; brew upgrade --formula ; brew cleanup ; brew autoremove ; brew tap buo/cask-upgrade ; rm -rf "$(brew --cache)"
+
 
 # Check AppleStore Updates
-tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
-if which mas | grep /*/local/bin/mas > /dev/null ; then echo ok > /dev/null ; else brew install mas ; fi
-mas list | awk '{print $2 " " $3 " " $4 " " $5 " " $6}'
-mas upgrade
+#if system_profiler SPDisplaysDataType | awk -F': ' '/Metal Support:/ {print $2}' | grep Metal > /dev/null ; then
+	tput bold ; echo ; echo '♻️ ' Check AppleStore Updates ; tput sgr0 ; sleep 1
+	if which mas | grep /*/local/bin/mas > /dev/null ; then mas list | awk '{print $2 " " $3 " " $4 " " $5 " " $6}'; mas upgrade ; else brew install mas ; fi
+#fi
 
 #-> Brew Cask & Apple Store Compare to /Applications Installed
 # Check Installed / Linked Cask Apps
@@ -110,9 +111,12 @@ chmod 755 /private/tmp/com.adam.Full_Update/InstallNow.command && /private/tmp/c
 tput bold ; echo ; echo '♻️ '  Check Cask Apps Updates ; tput sgr0 ; sleep 2
 brew cu -a -y --cleanup --force
 
+
 # Update oh my zsh
-tput bold ; echo ; echo '♻️ '  Check Update oh my zsh ; tput sgr0 ; sleep 2
-if ls ~/.oh-my-zsh | grep oh-my-zsh.sh > /dev/null ; then ~/.oh-my-zsh/tools/upgrade.sh ; fi
+if [ -f ~/.oh-my-zsh ] ; then
+	tput bold ; echo ; echo '♻️ '  Check Update oh my zsh ; tput sgr0 ; sleep 2
+	~/.oh-my-zsh/tools/upgrade.sh
+fi
 
 tput bold ; echo ; echo "🌙  Disable macOS System & AppStore Updates" ; tput sgr0
 # Disable AppStore Updates on this Session ?
