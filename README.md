@@ -2,11 +2,12 @@
 ## Update All
 #### macOS 10.14 < 15
 
-#### Update Applications & mac OS System :
+#### Update Applications mac OS :
 ```
 - Update Applications Found in AppleStore
 - Update Applications Found in brew cask
-- Update Current macOS System
+- Disable Auto Update Check macOS System
+- Update and Launch XProtect
 ```
 
 #### =-> Download & Execute :
