@@ -118,37 +118,6 @@ if [ -f ~/.oh-my-zsh ] ; then
 	~/.oh-my-zsh/tools/upgrade.sh
 fi
 
-tput bold ; echo ; echo "🌙  Disable macOS System & AppStore Updates" ; tput sgr0
-# Disable AppStore Updates on this Session ?
-tput bold ; echo ; echo Disable AppStore Updates ; tput sgr0
-/usr/bin/defaults write com.apple.appstored LastUpdateNotification -date "3029-12-12 12:00:00 +0000"
-/usr/bin/defaults read com.apple.appstored LastUpdateNotification
-echo
-
-tput bold ; echo "🌙 Disable AutoUpdates & Update Xprotect / XPR Updates" ; tput sgr0
-echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool true
-echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool true
-echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool true
-echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool true
-echo $AdminPass | sudo -S -k defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates -bool FALSE
-echo $AdminPass | sudo -S -k /usr/bin/defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool FALSE
-echo $AdminPass | sudo -S -k xprotect update
-echo $AdminPass | sudo -S -k softwareupdate --background --include-config
-
-echo
-
-tput bold ; echo "🌙 Disable Red Bubbles on System Preferences & AppStore" ; tput sgr0
-/usr/bin/defaults write com.apple.systempreferences AttentionPrefBundleIDs 0
-/usr/bin/defaults read com.apple.systempreferences AttentionPrefBundleIDs
-/usr/bin/defaults write com.apple.appstored BadgeCount 0
-/usr/bin/defaults read com.apple.appstored BadgeCount
-killall Dock
-echo
-
-# Unactivate Auto UnWanted OS Updates
-tput bold ; echo ; echo '⚓️ 'Unactivate Unwanted Auto mac OS Updates ; tput sgr0 ; sleep 1
-if [ -e /Library/Bundles/OSXNotification.bundle ]; then echo $AdminPass | sudo -S -k zip -r /Library/Bundles/OSXNotification.zip /Library/Bundles/OSXNotification.bundle && echo $AdminPass | sudo -S -k rm -vfr /Library/Bundles/OSXNotification.bundle ; fi
-
 rm -fr /tmp/com.adam.Full_Update/
 
 # Time
