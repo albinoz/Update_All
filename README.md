@@ -6,8 +6,6 @@
 ```
 - Update Applications Found in AppleStore
 - Update Applications Found in brew cask
-- Disable Auto Update Check macOS System
-- Update and Launch XProtect
 ```
 
 #### =-> Download & Execute :
