@@ -1,6 +1,6 @@
 
 ## Update All
-#### macOS 10.14 < 15
+#### macOS 10.15 < 15
 
 #### Update Applications mac OS :
 ```
